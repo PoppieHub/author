@@ -11,6 +11,8 @@
 
 namespace Symfony\Component\Notifier\Transport;
 
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Notifier\Event\FailedMessageEvent;
 use Symfony\Component\Notifier\Event\MessageEvent;
@@ -28,7 +30,7 @@ abstract class AbstractTransport implements TransportInterface
 {
     protected const HOST = 'localhost';
 
-    private ?EventDispatcherInterface $dispatcher;
+    private $dispatcher;
 
     protected $client;
     protected $host;
@@ -45,13 +47,13 @@ abstract class AbstractTransport implements TransportInterface
             $this->client = HttpClient::create();
         }
 
-        $this->dispatcher = $dispatcher;
+        $this->dispatcher = class_exists(Event::class) ? LegacyEventDispatcherProxy::decorate($dispatcher) : $dispatcher;
     }
 
     /**
      * @return $this
      */
-    public function setHost(?string $host): static
+    public function setHost(?string $host): self
     {
         $this->host = $host;
 
@@ -61,7 +63,7 @@ abstract class AbstractTransport implements TransportInterface
     /**
      * @return $this
      */
-    public function setPort(?int $port): static
+    public function setPort(?int $port): self
     {
         $this->port = $port;
 

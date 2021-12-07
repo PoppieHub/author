@@ -54,11 +54,20 @@ final class Intl
      */
     public const TIMEZONE_DIR = 'timezones';
 
-    private static string|false|null $icuVersion = false;
-    private static string $icuDataVersion;
+    /**
+     * @var string|bool|null
+     */
+    private static $icuVersion = false;
+
+    /**
+     * @var string
+     */
+    private static $icuDataVersion = false;
 
     /**
      * Returns whether the intl extension is installed.
+     *
+     * @return bool
      */
     public static function isExtensionLoaded(): bool
     {
@@ -67,6 +76,8 @@ final class Intl
 
     /**
      * Returns the version of the installed ICU library.
+     *
+     * @return string|null
      */
     public static function getIcuVersion(): ?string
     {
@@ -95,14 +106,22 @@ final class Intl
 
     /**
      * Returns the version of the installed ICU data.
+     *
+     * @return string
      */
     public static function getIcuDataVersion(): string
     {
-        return self::$icuDataVersion ??= trim(file_get_contents(self::getDataDirectory().'/version.txt'));
+        if (false === self::$icuDataVersion) {
+            self::$icuDataVersion = trim(file_get_contents(self::getDataDirectory().'/version.txt'));
+        }
+
+        return self::$icuDataVersion;
     }
 
     /**
      * Returns the ICU version that the stub classes mimic.
+     *
+     * @return string
      */
     public static function getIcuStubVersion(): string
     {
@@ -111,6 +130,8 @@ final class Intl
 
     /**
      * Returns the absolute path to the data directory.
+     *
+     * @return string
      */
     public static function getDataDirectory(): string
     {

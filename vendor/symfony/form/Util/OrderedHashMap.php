@@ -77,21 +77,21 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @var array<TKey, TValue>
      */
-    private array $elements = [];
+    private $elements = [];
 
     /**
      * The keys of the map in the order in which they were inserted or changed.
      *
      * @var list<TKey>
      */
-    private array $orderedKeys = [];
+    private $orderedKeys = [];
 
     /**
      * References to the cursors of all open iterators.
      *
      * @var array<int, int>
      */
-    private array $managedCursors = [];
+    private $managedCursors = [];
 
     /**
      * Creates a new map.
@@ -104,12 +104,22 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
         $this->orderedKeys = array_keys($elements);
     }
 
-    public function offsetExists(mixed $key): bool
+    /**
+     * @return bool
+     */
+    #[\ReturnTypeWillChange]
+    public function offsetExists($key)
     {
         return isset($this->elements[$key]);
     }
 
-    public function offsetGet(mixed $key): mixed
+    /**
+     * {@inheritdoc}
+     *
+     * @return TValue
+     */
+    #[\ReturnTypeWillChange]
+    public function offsetGet($key)
     {
         if (!isset($this->elements[$key])) {
             throw new \OutOfBoundsException(sprintf('The offset "%s" does not exist.', $key));
@@ -118,7 +128,13 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
         return $this->elements[$key];
     }
 
-    public function offsetSet(mixed $key, mixed $value): void
+    /**
+     * {@inheritdoc}
+     *
+     * @return void
+     */
+    #[\ReturnTypeWillChange]
+    public function offsetSet($key, $value)
     {
         if (null === $key || !isset($this->elements[$key])) {
             if (null === $key) {
@@ -136,7 +152,13 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
         $this->elements[$key] = $value;
     }
 
-    public function offsetUnset(mixed $key): void
+    /**
+     * {@inheritdoc}
+     *
+     * @return void
+     */
+    #[\ReturnTypeWillChange]
+    public function offsetUnset($key)
     {
         if (false !== ($position = array_search((string) $key, $this->orderedKeys))) {
             array_splice($this->orderedKeys, $position, 1);
@@ -150,12 +172,20 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
         }
     }
 
-    public function getIterator(): \Traversable
+    /**
+     * @return \Traversable<TKey, TValue>
+     */
+    #[\ReturnTypeWillChange]
+    public function getIterator()
     {
         return new OrderedHashMapIterator($this->elements, $this->orderedKeys, $this->managedCursors);
     }
 
-    public function count(): int
+    /**
+     * @return int
+     */
+    #[\ReturnTypeWillChange]
+    public function count()
     {
         return \count($this->elements);
     }

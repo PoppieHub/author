@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\Form\Command;
 
-use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Completion\CompletionInput;
 use Symfony\Component\Console\Completion\CompletionSuggestions;
@@ -32,15 +31,17 @@ use Symfony\Component\HttpKernel\Debug\FileLinkFormatter;
  *
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
-#[AsCommand(name: 'debug:form', description: 'Display form type information')]
 class DebugCommand extends Command
 {
-    private FormRegistryInterface $formRegistry;
-    private array $namespaces;
-    private array $types;
-    private array $extensions;
-    private array $guessers;
-    private ?FileLinkFormatter $fileLinkFormatter;
+    protected static $defaultName = 'debug:form';
+    protected static $defaultDescription = 'Display form type information';
+
+    private $formRegistry;
+    private $namespaces;
+    private $types;
+    private $extensions;
+    private $guessers;
+    private $fileLinkFormatter;
 
     public function __construct(FormRegistryInterface $formRegistry, array $namespaces = ['Symfony\Component\Form\Extension\Core\Type'], array $types = [], array $extensions = [], array $guessers = [], FileLinkFormatter $fileLinkFormatter = null)
     {
@@ -66,6 +67,7 @@ class DebugCommand extends Command
                 new InputOption('show-deprecated', null, InputOption::VALUE_NONE, 'Display deprecated options in form types'),
                 new InputOption('format', null, InputOption::VALUE_REQUIRED, 'The output format (txt or json)', 'txt'),
             ])
+            ->setDescription(self::$defaultDescription)
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> command displays information about form types.
 
@@ -101,7 +103,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
 

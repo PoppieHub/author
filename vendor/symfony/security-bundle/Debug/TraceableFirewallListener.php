@@ -25,8 +25,8 @@ use Symfony\Component\Security\Http\Firewall\FirewallListenerInterface;
  */
 final class TraceableFirewallListener extends FirewallListener
 {
-    private array $wrappedListeners = [];
-    private array $authenticatorsInfo = [];
+    private $wrappedListeners = [];
+    private $authenticatorsInfo = [];
 
     public function getWrappedListeners()
     {

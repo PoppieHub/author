@@ -354,6 +354,9 @@ class ProfilerController
          ]), 200, ['Content-Type' => 'text/html']);
     }
 
+    /**
+     * Gets the Template Manager.
+     */
     protected function getTemplateManager(): TemplateManager
     {
         if (null === $this->templateManager) {

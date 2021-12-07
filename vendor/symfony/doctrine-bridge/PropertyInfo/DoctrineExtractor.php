@@ -31,7 +31,7 @@ use Symfony\Component\PropertyInfo\Type;
  */
 class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeExtractorInterface, PropertyAccessExtractorInterface
 {
-    private EntityManagerInterface $entityManager;
+    private $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -41,7 +41,7 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
     /**
      * {@inheritdoc}
      */
-    public function getProperties(string $class, array $context = []): ?array
+    public function getProperties(string $class, array $context = [])
     {
         if (null === $metadata = $this->getMetadata($class)) {
             return null;
@@ -63,7 +63,7 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
     /**
      * {@inheritdoc}
      */
-    public function getTypes(string $class, string $property, array $context = []): ?array
+    public function getTypes(string $class, string $property, array $context = [])
     {
         if (null === $metadata = $this->getMetadata($class)) {
             return null;
@@ -184,7 +184,7 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
     /**
      * {@inheritdoc}
      */
-    public function isReadable(string $class, string $property, array $context = []): ?bool
+    public function isReadable(string $class, string $property, array $context = [])
     {
         return null;
     }
@@ -192,7 +192,7 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
     /**
      * {@inheritdoc}
      */
-    public function isWritable(string $class, string $property, array $context = []): ?bool
+    public function isWritable(string $class, string $property, array $context = [])
     {
         if (
             null === ($metadata = $this->getMetadata($class))

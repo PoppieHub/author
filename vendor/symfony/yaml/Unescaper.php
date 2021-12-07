@@ -32,6 +32,8 @@ class Unescaper
      * Unescapes a single quoted string.
      *
      * @param string $value A single quoted string
+     *
+     * @return string
      */
     public function unescapeSingleQuotedString(string $value): string
     {
@@ -42,6 +44,8 @@ class Unescaper
      * Unescapes a double quoted string.
      *
      * @param string $value A double quoted string
+     *
+     * @return string
      */
     public function unescapeDoubleQuotedString(string $value): string
     {
@@ -57,6 +61,8 @@ class Unescaper
      * Unescapes a character that was found in a double-quoted string.
      *
      * @param string $value An escaped character
+     *
+     * @return string
      */
     private function unescapeCharacter(string $value): string
     {

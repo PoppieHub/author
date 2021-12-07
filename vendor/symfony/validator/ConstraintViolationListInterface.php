@@ -36,16 +36,20 @@ interface ConstraintViolationListInterface extends \Traversable, \Countable, \Ar
      *
      * @param int $offset The offset of the violation
      *
+     * @return ConstraintViolationInterface
+     *
      * @throws \OutOfBoundsException if the offset does not exist
      */
-    public function get(int $offset): ConstraintViolationInterface;
+    public function get(int $offset);
 
     /**
      * Returns whether the given offset exists.
      *
      * @param int $offset The violation offset
+     *
+     * @return bool
      */
-    public function has(int $offset): bool;
+    public function has(int $offset);
 
     /**
      * Sets a violation at a given offset.

@@ -29,22 +29,14 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
     use CommonResponseTrait;
     use TransportResponseTrait;
 
-    /**
-     * @var resource
-     */
     private $context;
-    private string $url;
+    private $url;
     private $resolver;
     private $onProgress;
-    private ?int $remaining = null;
-
-    /**
-     * @var resource|null
-     */
+    private $remaining;
     private $buffer;
-
-    private NativeClientState $multi;
-    private float $pauseExpiry = 0.0;
+    private $multi;
+    private $pauseExpiry = 0;
 
     /**
      * @internal
@@ -89,7 +81,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
     /**
      * {@inheritdoc}
      */
-    public function getInfo(string $type = null): mixed
+    public function getInfo(string $type = null)
     {
         if (!$info = $this->finalInfo) {
             $info = $this->info;

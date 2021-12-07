@@ -21,12 +21,12 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\Credentia
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-class Passport
+class Passport implements UserPassportInterface
 {
     protected $user;
 
-    private array $badges = [];
-    private array $attributes = [];
+    private $badges = [];
+    private $attributes = [];
 
     /**
      * @param CredentialsInterface $credentials the credentials to check for this authentication, use
@@ -42,6 +42,9 @@ class Passport
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getUser(): UserInterface
     {
         if (null === $this->user) {
@@ -55,7 +58,10 @@ class Passport
         return $this->user;
     }
 
-    public function addBadge(BadgeInterface $badge): static
+    /**
+     * @return $this
+     */
+    public function addBadge(BadgeInterface $badge): PassportInterface
     {
         $this->badges[\get_class($badge)] = $badge;
 
@@ -80,12 +86,20 @@ class Passport
         return $this->badges;
     }
 
-    public function setAttribute(string $name, mixed $value): void
+    /**
+     * @param mixed $value
+     */
+    public function setAttribute(string $name, $value): void
     {
         $this->attributes[$name] = $value;
     }
 
-    public function getAttribute(string $name, mixed $default = null): mixed
+    /**
+     * @param mixed $default
+     *
+     * @return mixed
+     */
+    public function getAttribute(string $name, $default = null)
     {
         return $this->attributes[$name] ?? $default;
     }

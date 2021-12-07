@@ -23,7 +23,7 @@ use Symfony\Component\Messenger\Event\WorkerMessageHandledEvent;
  */
 class DoctrineClearEntityManagerWorkerSubscriber implements EventSubscriberInterface
 {
-    private ManagerRegistry $managerRegistry;
+    private $managerRegistry;
 
     public function __construct(ManagerRegistry $managerRegistry)
     {
@@ -40,7 +40,7 @@ class DoctrineClearEntityManagerWorkerSubscriber implements EventSubscriberInter
         $this->clearEntityManagers();
     }
 
-    public static function getSubscribedEvents(): array
+    public static function getSubscribedEvents()
     {
         return [
             WorkerMessageHandledEvent::class => 'onWorkerMessageHandled',

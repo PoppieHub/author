@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\Dotenv\Command;
 
-use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,9 +25,11 @@ use Symfony\Component\Dotenv\Dotenv;
  * @internal
  */
 #[Autoconfigure(bind: ['$dotenvPath' => '%kernel.project_dir%/.env', '$defaultEnv' => '%kernel.environment%'])]
-#[AsCommand(name: 'dotenv:dump', description: 'Compiles .env files to .env.local.php')]
 final class DotenvDumpCommand extends Command
 {
+    protected static $defaultName = 'dotenv:dump';
+    protected static $defaultDescription = 'Compiles .env files to .env.local.php';
+
     private $dotenvPath;
     private $defaultEnv;
 

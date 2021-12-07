@@ -27,9 +27,11 @@ class UlidToStringTransformer implements DataTransformerInterface
      *
      * @param Ulid $value A Ulid object
      *
+     * @return string|null
+     *
      * @throws TransformationFailedException If the given value is not a Ulid object
      */
-    public function transform(mixed $value): ?string
+    public function transform($value)
     {
         if (null === $value) {
             return null;
@@ -47,10 +49,12 @@ class UlidToStringTransformer implements DataTransformerInterface
      *
      * @param string $value A ULID string
      *
+     * @return Ulid|null
+     *
      * @throws TransformationFailedException If the given value is not a string,
      *                                       or could not be transformed
      */
-    public function reverseTransform(mixed $value): ?Ulid
+    public function reverseTransform($value)
     {
         if (null === $value || '' === $value) {
             return null;

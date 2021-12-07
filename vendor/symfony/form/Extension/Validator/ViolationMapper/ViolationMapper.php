@@ -28,9 +28,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ViolationMapper implements ViolationMapperInterface
 {
-    private ?FormRendererInterface $formRenderer;
-    private ?TranslatorInterface $translator;
-    private bool $allowNonSynchronized = false;
+    private $formRenderer;
+    private $translator;
+    private $allowNonSynchronized = false;
 
     public function __construct(FormRendererInterface $formRenderer = null, TranslatorInterface $translator = null)
     {

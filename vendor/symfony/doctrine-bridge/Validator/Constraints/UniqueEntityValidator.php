@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  */
 class UniqueEntityValidator extends ConstraintValidator
 {
-    private ManagerRegistry $registry;
+    private $registry;
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -39,7 +39,7 @@ class UniqueEntityValidator extends ConstraintValidator
      * @throws UnexpectedTypeException
      * @throws ConstraintDefinitionException
      */
-    public function validate(mixed $entity, Constraint $constraint)
+    public function validate($entity, Constraint $constraint)
     {
         if (!$constraint instanceof UniqueEntity) {
             throw new UnexpectedTypeException($constraint, UniqueEntity::class);
@@ -188,13 +188,13 @@ class UniqueEntityValidator extends ConstraintValidator
             ->addViolation();
     }
 
-    private function formatWithIdentifiers(ObjectManager $em, ClassMetadata $class, mixed $value)
+    private function formatWithIdentifiers(ObjectManager $em, ClassMetadata $class, $value)
     {
         if (!\is_object($value) || $value instanceof \DateTimeInterface) {
             return $this->formatValue($value, self::PRETTY_DATE);
         }
 
-        if ($value instanceof \Stringable) {
+        if (method_exists($value, '__toString')) {
             return (string) $value;
         }
 

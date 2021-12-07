@@ -25,18 +25,40 @@ namespace Symfony\Component\Form\Util;
  */
 class OrderedHashMapIterator implements \Iterator
 {
-    /** @var array<TKey, TValue> */
-    private array $elements;
-    /** @var list<TKey> */
-    private array $orderedKeys;
-    private int $cursor = 0;
-    private int $cursorId;
-    /** @var array<int, int> */
-    private array $managedCursors;
-    /** @var TKey|null */
-    private string|int|null $key = null;
-    /** @var TValue|null */
-    private mixed $current = null;
+    /**
+     * @var array<TKey, TValue>
+     */
+    private $elements;
+
+    /**
+     * @var list<TKey>
+     */
+    private $orderedKeys;
+
+    /**
+     * @var int
+     */
+    private $cursor = 0;
+
+    /**
+     * @var int
+     */
+    private $cursorId;
+
+    /**
+     * @var array<int, int>
+     */
+    private $managedCursors;
+
+    /**
+     * @var TKey|null
+     */
+    private $key;
+
+    /**
+     * @var TValue|null
+     */
+    private $current;
 
     /**
      * @param array<TKey, TValue> $elements       The elements of the map, indexed by their
@@ -82,8 +104,11 @@ class OrderedHashMapIterator implements \Iterator
 
     /**
      * {@inheritdoc}
+     *
+     * @return mixed
      */
-    public function current(): mixed
+    #[\ReturnTypeWillChange]
+    public function current()
     {
         return $this->current;
     }
@@ -106,8 +131,11 @@ class OrderedHashMapIterator implements \Iterator
 
     /**
      * {@inheritdoc}
+     *
+     * @return mixed
      */
-    public function key(): mixed
+    #[\ReturnTypeWillChange]
+    public function key()
     {
         if (null === $this->key) {
             return null;

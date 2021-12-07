@@ -19,8 +19,8 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 final class FailedMessageEvent extends Event
 {
-    private MessageInterface $message;
-    private \Throwable $error;
+    private $message;
+    private $error;
 
     public function __construct(MessageInterface $message, \Throwable $error)
     {

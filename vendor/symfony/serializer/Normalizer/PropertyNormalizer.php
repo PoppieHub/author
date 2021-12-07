@@ -35,7 +35,7 @@ class PropertyNormalizer extends AbstractObjectNormalizer
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization(mixed $data, string $format = null): bool
+    public function supportsNormalization($data, string $format = null)
     {
         return parent::supportsNormalization($data, $format) && $this->supports(\get_class($data));
     }
@@ -43,7 +43,7 @@ class PropertyNormalizer extends AbstractObjectNormalizer
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization(mixed $data, string $type, string $format = null): bool
+    public function supportsDenormalization($data, string $type, string $format = null)
     {
         return parent::supportsDenormalization($data, $type, $format) && $this->supports($type);
     }
@@ -78,7 +78,7 @@ class PropertyNormalizer extends AbstractObjectNormalizer
     /**
      * {@inheritdoc}
      */
-    protected function isAllowedAttribute(object|string $classOrObject, string $attribute, string $format = null, array $context = []): bool
+    protected function isAllowedAttribute($classOrObject, string $attribute, string $format = null, array $context = [])
     {
         if (!parent::isAllowedAttribute($classOrObject, $attribute, $format, $context)) {
             return false;
@@ -99,7 +99,7 @@ class PropertyNormalizer extends AbstractObjectNormalizer
     /**
      * {@inheritdoc}
      */
-    protected function extractAttributes(object $object, string $format = null, array $context = []): array
+    protected function extractAttributes(object $object, string $format = null, array $context = [])
     {
         $reflectionObject = new \ReflectionObject($object);
         $attributes = [];
@@ -120,7 +120,7 @@ class PropertyNormalizer extends AbstractObjectNormalizer
     /**
      * {@inheritdoc}
      */
-    protected function getAttributeValue(object $object, string $attribute, string $format = null, array $context = []): mixed
+    protected function getAttributeValue(object $object, string $attribute, string $format = null, array $context = [])
     {
         try {
             $reflectionProperty = $this->getReflectionProperty($object, $attribute);
@@ -133,7 +133,7 @@ class PropertyNormalizer extends AbstractObjectNormalizer
             $reflectionProperty->setAccessible(true);
         }
 
-        if ($reflectionProperty->hasType()) {
+        if (\PHP_VERSION_ID >= 70400 && $reflectionProperty->hasType()) {
             return $reflectionProperty->getValue($object);
         }
 
@@ -154,7 +154,7 @@ class PropertyNormalizer extends AbstractObjectNormalizer
     /**
      * {@inheritdoc}
      */
-    protected function setAttributeValue(object $object, string $attribute, mixed $value, string $format = null, array $context = [])
+    protected function setAttributeValue(object $object, string $attribute, $value, string $format = null, array $context = [])
     {
         try {
             $reflectionProperty = $this->getReflectionProperty($object, $attribute);
@@ -175,9 +175,11 @@ class PropertyNormalizer extends AbstractObjectNormalizer
     }
 
     /**
+     * @param string|object $classOrObject
+     *
      * @throws \ReflectionException
      */
-    private function getReflectionProperty(string|object $classOrObject, string $attribute): \ReflectionProperty
+    private function getReflectionProperty($classOrObject, string $attribute): \ReflectionProperty
     {
         $reflectionClass = new \ReflectionClass($classOrObject);
         while (true) {

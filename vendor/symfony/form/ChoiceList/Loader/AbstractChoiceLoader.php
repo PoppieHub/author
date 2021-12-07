@@ -21,8 +21,10 @@ abstract class AbstractChoiceLoader implements ChoiceLoaderInterface
 {
     /**
      * The loaded choice list.
+     *
+     * @var ArrayChoiceList
      */
-    private ArrayChoiceList $choiceList;
+    private $choiceList;
 
     /**
      * @final
@@ -37,13 +39,13 @@ abstract class AbstractChoiceLoader implements ChoiceLoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function loadChoicesForValues(array $values, callable $value = null): array
+    public function loadChoicesForValues(array $values, callable $value = null)
     {
         if (!$values) {
             return [];
         }
 
-        if (isset($this->choiceList)) {
+        if ($this->choiceList) {
             return $this->choiceList->getChoicesForValues($values);
         }
 
@@ -53,7 +55,7 @@ abstract class AbstractChoiceLoader implements ChoiceLoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function loadValuesForChoices(array $choices, callable $value = null): array
+    public function loadValuesForChoices(array $choices, callable $value = null)
     {
         if (!$choices) {
             return [];
@@ -64,7 +66,7 @@ abstract class AbstractChoiceLoader implements ChoiceLoaderInterface
             return array_map($value, $choices);
         }
 
-        if (isset($this->choiceList)) {
+        if ($this->choiceList) {
             return $this->choiceList->getValuesForChoices($choices);
         }
 

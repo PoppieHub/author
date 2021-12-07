@@ -22,12 +22,30 @@ use Symfony\Component\PropertyAccess\PropertyPathInterface;
  */
 class ViolationPath implements \IteratorAggregate, PropertyPathInterface
 {
-    /** @var list<string> */
-    private array $elements = [];
-    private array $isIndex = [];
-    private array $mapsForm = [];
-    private string $pathAsString = '';
-    private int $length = 0;
+    /**
+     * @var list<string>
+     */
+    private $elements = [];
+
+    /**
+     * @var array
+     */
+    private $isIndex = [];
+
+    /**
+     * @var array
+     */
+    private $mapsForm = [];
+
+    /**
+     * @var string
+     */
+    private $pathAsString = '';
+
+    /**
+     * @var int
+     */
+    private $length = 0;
 
     /**
      * Creates a new violation path from a string.
@@ -96,7 +114,10 @@ class ViolationPath implements \IteratorAggregate, PropertyPathInterface
         $this->buildString();
     }
 
-    public function __toString(): string
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
     {
         return $this->pathAsString;
     }
@@ -104,7 +125,7 @@ class ViolationPath implements \IteratorAggregate, PropertyPathInterface
     /**
      * {@inheritdoc}
      */
-    public function getLength(): int
+    public function getLength()
     {
         return $this->length;
     }
@@ -112,7 +133,7 @@ class ViolationPath implements \IteratorAggregate, PropertyPathInterface
     /**
      * {@inheritdoc}
      */
-    public function getParent(): ?PropertyPathInterface
+    public function getParent()
     {
         if ($this->length <= 1) {
             return null;
@@ -133,7 +154,7 @@ class ViolationPath implements \IteratorAggregate, PropertyPathInterface
     /**
      * {@inheritdoc}
      */
-    public function getElements(): array
+    public function getElements()
     {
         return $this->elements;
     }
@@ -141,7 +162,7 @@ class ViolationPath implements \IteratorAggregate, PropertyPathInterface
     /**
      * {@inheritdoc}
      */
-    public function getElement(int $index): string
+    public function getElement(int $index)
     {
         if (!isset($this->elements[$index])) {
             throw new OutOfBoundsException(sprintf('The index "%s" is not within the violation path.', $index));
@@ -153,7 +174,7 @@ class ViolationPath implements \IteratorAggregate, PropertyPathInterface
     /**
      * {@inheritdoc}
      */
-    public function isProperty(int $index): bool
+    public function isProperty(int $index)
     {
         if (!isset($this->isIndex[$index])) {
             throw new OutOfBoundsException(sprintf('The index "%s" is not within the violation path.', $index));
@@ -165,7 +186,7 @@ class ViolationPath implements \IteratorAggregate, PropertyPathInterface
     /**
      * {@inheritdoc}
      */
-    public function isIndex(int $index): bool
+    public function isIndex(int $index)
     {
         if (!isset($this->isIndex[$index])) {
             throw new OutOfBoundsException(sprintf('The index "%s" is not within the violation path.', $index));
@@ -184,9 +205,11 @@ class ViolationPath implements \IteratorAggregate, PropertyPathInterface
      * In this example, "address" and "office" map to forms, while
      * "street does not.
      *
+     * @return bool
+     *
      * @throws OutOfBoundsException if the offset is invalid
      */
-    public function mapsForm(int $index): bool
+    public function mapsForm(int $index)
     {
         if (!isset($this->mapsForm[$index])) {
             throw new OutOfBoundsException(sprintf('The index "%s" is not within the violation path.', $index));
@@ -197,8 +220,11 @@ class ViolationPath implements \IteratorAggregate, PropertyPathInterface
 
     /**
      * Returns a new iterator for this path.
+     *
+     * @return ViolationPathIterator
      */
-    public function getIterator(): ViolationPathIterator
+    #[\ReturnTypeWillChange]
+    public function getIterator()
     {
         return new ViolationPathIterator($this);
     }

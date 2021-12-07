@@ -47,8 +47,10 @@ class EntityType extends DoctrineType
      * Return the default loader object.
      *
      * @param QueryBuilder $queryBuilder
+     *
+     * @return ORMQueryBuilderLoader
      */
-    public function getLoader(ObjectManager $manager, object $queryBuilder, string $class): ORMQueryBuilderLoader
+    public function getLoader(ObjectManager $manager, object $queryBuilder, string $class)
     {
         if (!$queryBuilder instanceof QueryBuilder) {
             throw new \TypeError(sprintf('Expected an instance of "%s", but got "%s".', QueryBuilder::class, get_debug_type($queryBuilder)));
@@ -60,7 +62,7 @@ class EntityType extends DoctrineType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix(): string
+    public function getBlockPrefix()
     {
         return 'entity';
     }

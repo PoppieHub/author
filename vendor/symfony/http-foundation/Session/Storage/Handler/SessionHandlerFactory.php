@@ -21,12 +21,17 @@ use Symfony\Component\Cache\Traits\RedisProxy;
  */
 class SessionHandlerFactory
 {
-    public static function createHandler(object|string $connection): AbstractSessionHandler
+    /**
+     * @param \Redis|\RedisArray|\RedisCluster|\Predis\ClientInterface|RedisProxy|RedisClusterProxy|\Memcached|\PDO|string $connection Connection or DSN
+     */
+    public static function createHandler($connection): AbstractSessionHandler
     {
-        if (\is_string($connection) && $options = parse_url($connection)) {
+        if (!\is_string($connection) && !\is_object($connection)) {
+            throw new \TypeError(sprintf('Argument 1 passed to "%s()" must be a string or a connection object, "%s" given.', __METHOD__, get_debug_type($connection)));
+        }
+
+        if ($options = parse_url($connection)) {
             parse_str($options['query'] ?? '', $options);
-        } else {
-            $options = [];
         }
 
         switch (true) {
@@ -60,7 +65,7 @@ class SessionHandlerFactory
                 $handlerClass = str_starts_with($connection, 'memcached:') ? MemcachedSessionHandler::class : RedisSessionHandler::class;
                 $connection = AbstractAdapter::createConnection($connection, ['lazy' => true]);
 
-                return new $handlerClass($connection, array_intersect_key($options, ['prefix' => 1, 'ttl' => 1]));
+                return new $handlerClass($connection, array_intersect_key($options ?: [], ['prefix' => 1, 'ttl' => 1]));
 
             case str_starts_with($connection, 'pdo_oci://'):
                 if (!class_exists(DriverManager::class)) {

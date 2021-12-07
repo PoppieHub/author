@@ -24,7 +24,7 @@ class AuthenticationExpiredException extends AccountStatusException
     /**
      * {@inheritdoc}
      */
-    public function getMessageKey(): string
+    public function getMessageKey()
     {
         return 'Authentication expired because your account information has changed.';
     }

@@ -13,12 +13,10 @@ namespace Symfony\Component\Form;
 
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\Guess\Guess;
-use Symfony\Component\Form\Guess\TypeGuess;
-use Symfony\Component\Form\Guess\ValueGuess;
 
 class FormTypeGuesserChain implements FormTypeGuesserInterface
 {
-    private array $guessers = [];
+    private $guessers = [];
 
     /**
      * @param FormTypeGuesserInterface[] $guessers
@@ -46,7 +44,7 @@ class FormTypeGuesserChain implements FormTypeGuesserInterface
     /**
      * {@inheritdoc}
      */
-    public function guessType(string $class, string $property): ?TypeGuess
+    public function guessType(string $class, string $property)
     {
         return $this->guess(function ($guesser) use ($class, $property) {
             return $guesser->guessType($class, $property);
@@ -56,7 +54,7 @@ class FormTypeGuesserChain implements FormTypeGuesserInterface
     /**
      * {@inheritdoc}
      */
-    public function guessRequired(string $class, string $property): ?ValueGuess
+    public function guessRequired(string $class, string $property)
     {
         return $this->guess(function ($guesser) use ($class, $property) {
             return $guesser->guessRequired($class, $property);
@@ -66,7 +64,7 @@ class FormTypeGuesserChain implements FormTypeGuesserInterface
     /**
      * {@inheritdoc}
      */
-    public function guessMaxLength(string $class, string $property): ?ValueGuess
+    public function guessMaxLength(string $class, string $property)
     {
         return $this->guess(function ($guesser) use ($class, $property) {
             return $guesser->guessMaxLength($class, $property);
@@ -76,7 +74,7 @@ class FormTypeGuesserChain implements FormTypeGuesserInterface
     /**
      * {@inheritdoc}
      */
-    public function guessPattern(string $class, string $property): ?ValueGuess
+    public function guessPattern(string $class, string $property)
     {
         return $this->guess(function ($guesser) use ($class, $property) {
             return $guesser->guessPattern($class, $property);

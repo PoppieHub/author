@@ -30,6 +30,7 @@ use Symfony\Component\Notifier\Bridge\MessageBird\MessageBirdTransportFactory;
 use Symfony\Component\Notifier\Bridge\MessageMedia\MessageMediaTransportFactory;
 use Symfony\Component\Notifier\Bridge\MicrosoftTeams\MicrosoftTeamsTransport;
 use Symfony\Component\Notifier\Bridge\Mobyt\MobytTransportFactory;
+use Symfony\Component\Notifier\Bridge\Nexmo\NexmoTransportFactory;
 use Symfony\Component\Notifier\Bridge\Octopush\OctopushTransportFactory;
 use Symfony\Component\Notifier\Bridge\OvhCloud\OvhCloudTransportFactory;
 use Symfony\Component\Notifier\Bridge\RocketChat\RocketChatTransportFactory;
@@ -60,8 +61,10 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @final since Symfony 5.4
  */
-final class Transport
+class Transport
 {
     private const FACTORY_CLASSES = [
         AllMySmsTransportFactory::class,
@@ -83,6 +86,7 @@ final class Transport
         MessageMediaTransportFactory::class,
         MicrosoftTeamsTransport::class,
         MobytTransportFactory::class,
+        NexmoTransportFactory::class,
         OctopushTransportFactory::class,
         OvhCloudTransportFactory::class,
         RocketChatTransportFactory::class,
@@ -102,7 +106,7 @@ final class Transport
         ZulipTransportFactory::class,
     ];
 
-    private iterable $factories;
+    private $factories;
 
     public static function fromDsn(string $dsn, EventDispatcherInterface $dispatcher = null, HttpClientInterface $client = null): TransportInterface
     {
@@ -119,7 +123,7 @@ final class Transport
     }
 
     /**
-     * @param iterable<mixed, TransportFactoryInterface> $factories
+     * @param TransportFactoryInterface[] $factories
      */
     public function __construct(iterable $factories)
     {

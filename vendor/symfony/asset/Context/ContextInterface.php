@@ -20,11 +20,15 @@ interface ContextInterface
 {
     /**
      * Gets the base path.
+     *
+     * @return string
      */
-    public function getBasePath(): string;
+    public function getBasePath();
 
     /**
      * Checks whether the request is secure or not.
+     *
+     * @return bool
      */
-    public function isSecure(): bool;
+    public function isSecure();
 }

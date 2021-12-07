@@ -33,7 +33,7 @@ class XmlFileLoader extends FileLoader
     /**
      * {@inheritdoc}
      */
-    public function loadClassMetadata(ClassMetadata $metadata): bool
+    public function loadClassMetadata(ClassMetadata $metadata)
     {
         if (null === $this->classes) {
             $this->loadClassesFromXml();
@@ -55,7 +55,7 @@ class XmlFileLoader extends FileLoader
      *
      * @return string[]
      */
-    public function getMappedClasses(): array
+    public function getMappedClasses()
     {
         if (null === $this->classes) {
             $this->loadClassesFromXml();
@@ -71,7 +71,7 @@ class XmlFileLoader extends FileLoader
      *
      * @return Constraint[]
      */
-    protected function parseConstraints(\SimpleXMLElement $nodes): array
+    protected function parseConstraints(\SimpleXMLElement $nodes)
     {
         $constraints = [];
 
@@ -102,8 +102,10 @@ class XmlFileLoader extends FileLoader
      * Parses a collection of "value" XML nodes.
      *
      * @param \SimpleXMLElement $nodes The XML nodes
+     *
+     * @return array
      */
-    protected function parseValues(\SimpleXMLElement $nodes): array
+    protected function parseValues(\SimpleXMLElement $nodes)
     {
         $values = [];
 
@@ -134,8 +136,10 @@ class XmlFileLoader extends FileLoader
      * Parses a collection of "option" XML nodes.
      *
      * @param \SimpleXMLElement $nodes The XML nodes
+     *
+     * @return array
      */
-    protected function parseOptions(\SimpleXMLElement $nodes): array
+    protected function parseOptions(\SimpleXMLElement $nodes)
     {
         $options = [];
 
@@ -164,9 +168,11 @@ class XmlFileLoader extends FileLoader
     /**
      * Loads the XML class descriptions from the given file.
      *
+     * @return \SimpleXMLElement
+     *
      * @throws MappingException If the file could not be loaded
      */
-    protected function parseFile(string $path): \SimpleXMLElement
+    protected function parseFile(string $path)
     {
         try {
             $dom = XmlUtils::loadFile($path, __DIR__.'/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd');

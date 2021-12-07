@@ -25,8 +25,10 @@ class Configuration implements ConfigurationInterface
 {
     /**
      * Generates the configuration tree builder.
+     *
+     * @return TreeBuilder
      */
-    public function getConfigTreeBuilder(): TreeBuilder
+    public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('twig');
         $rootNode = $treeBuilder->getRootNode();

@@ -112,6 +112,10 @@ class UnsupportedSchemeException extends LogicException
             'class' => Bridge\Mobyt\MobytTransportFactory::class,
             'package' => 'symfony/mobyt-notifier',
         ],
+        'nexmo' => [
+            'class' => Bridge\Nexmo\NexmoTransportFactory::class,
+            'package' => 'symfony/nexmo-notifier',
+        ],
         'octopush' => [
             'class' => Bridge\Octopush\OctopushTransportFactory::class,
             'package' => 'symfony/octopush-notifier',

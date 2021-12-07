@@ -149,7 +149,10 @@ class GenericRuntime implements RuntimeInterface
         return new ClosureRunner($application);
     }
 
-    protected function getArgument(\ReflectionParameter $parameter, ?string $type): mixed
+    /**
+     * @return mixed
+     */
+    protected function getArgument(\ReflectionParameter $parameter, ?string $type)
     {
         if ('array' === $type) {
             switch ($parameter->name) {

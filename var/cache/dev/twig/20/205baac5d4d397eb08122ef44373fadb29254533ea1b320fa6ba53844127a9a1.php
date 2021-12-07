@@ -194,6 +194,6 @@ class __TwigTemplate_870e38572bde2ce2d997dd3da5197bf3de751d567d12ffed0dd3067568b
         {% block body %}{% endblock %}
     </body>
 </html>
-", "base.html.twig", "C:\\OpenServer\\domains\\author\\author\\templates\\base.html.twig");
+", "base.html.twig", "C:\\OpenServer\\domains\\author\\templates\\base.html.twig");
     }
 }

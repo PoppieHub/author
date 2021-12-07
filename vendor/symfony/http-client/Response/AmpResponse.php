@@ -43,14 +43,14 @@ final class AmpResponse implements ResponseInterface, StreamableInterface
     use CommonResponseTrait;
     use TransportResponseTrait;
 
-    private static string $nextId = 'a';
+    private static $nextId = 'a';
 
-    private AmpClientState $multi;
-    private ?array $options;
-    private CancellationTokenSource $canceller;
-    private \Closure $onProgress;
+    private $multi;
+    private $options;
+    private $canceller;
+    private $onProgress;
 
-    private static ?string $delay = null;
+    private static $delay;
 
     /**
      * @internal
@@ -137,7 +137,7 @@ final class AmpResponse implements ResponseInterface, StreamableInterface
     /**
      * {@inheritdoc}
      */
-    public function getInfo(string $type = null): mixed
+    public function getInfo(string $type = null)
     {
         return null !== $type ? $this->info[$type] ?? null : $this->info;
     }

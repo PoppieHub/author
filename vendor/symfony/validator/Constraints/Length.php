@@ -44,9 +44,15 @@ class Length extends Constraint
     public $min;
     public $charset = 'UTF-8';
     public $normalizer;
+    public $allowEmptyString = false;
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param int|array|null $exactly The expected exact length or a set of options
+     */
     public function __construct(
-        int|array $exactly = null,
+        $exactly = null,
         int $min = null,
         int $max = null,
         string $charset = null,
@@ -56,7 +62,7 @@ class Length extends Constraint
         string $maxMessage = null,
         string $charsetMessage = null,
         array $groups = null,
-        mixed $payload = null,
+        $payload = null,
         array $options = []
     ) {
         if (\is_array($exactly)) {
@@ -90,6 +96,10 @@ class Length extends Constraint
 
         if (null !== $this->normalizer && !\is_callable($this->normalizer)) {
             throw new InvalidArgumentException(sprintf('The "normalizer" option must be a valid callable ("%s" given).', get_debug_type($this->normalizer)));
+        }
+
+        if (isset($options['allowEmptyString'])) {
+            trigger_deprecation('symfony/validator', '5.2', sprintf('The "allowEmptyString" option of the "%s" constraint is deprecated.', self::class));
         }
     }
 }

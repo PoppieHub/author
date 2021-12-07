@@ -23,6 +23,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgrade
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 
 /**
@@ -33,9 +34,9 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
  */
 class HttpBasicAuthenticator implements AuthenticatorInterface, AuthenticationEntryPointInterface
 {
-    private string $realmName;
-    private UserProviderInterface $userProvider;
-    private ?LoggerInterface $logger;
+    private $realmName;
+    private $userProvider;
+    private $logger;
 
     public function __construct(string $realmName, UserProviderInterface $userProvider, LoggerInterface $logger = null)
     {
@@ -58,13 +59,21 @@ class HttpBasicAuthenticator implements AuthenticatorInterface, AuthenticationEn
         return $request->headers->has('PHP_AUTH_USER');
     }
 
-    public function authenticate(Request $request): Passport
+    public function authenticate(Request $request): PassportInterface
     {
         $username = $request->headers->get('PHP_AUTH_USER');
         $password = $request->headers->get('PHP_AUTH_PW', '');
 
+        // @deprecated since Symfony 5.3, change to $this->userProvider->loadUserByIdentifier() in 6.0
+        $method = 'loadUserByIdentifier';
+        if (!method_exists($this->userProvider, 'loadUserByIdentifier')) {
+            trigger_deprecation('symfony/security-core', '5.3', 'Not implementing method "loadUserByIdentifier()" in user provider "%s" is deprecated. This method will replace "loadUserByUsername()" in Symfony 6.0.', get_debug_type($this->userProvider));
+
+            $method = 'loadUserByUsername';
+        }
+
         $passport = new Passport(
-            new UserBadge($username, [$this->userProvider, 'loadUserByIdentifier']),
+            new UserBadge($username, [$this->userProvider, $method]),
             new PasswordCredentials($password)
         );
         if ($this->userProvider instanceof PasswordUpgraderInterface) {
@@ -72,6 +81,16 @@ class HttpBasicAuthenticator implements AuthenticatorInterface, AuthenticationEn
         }
 
         return $passport;
+    }
+
+    /**
+     * @deprecated since Symfony 5.4, use {@link createToken()} instead
+     */
+    public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface
+    {
+        trigger_deprecation('symfony/security-http', '5.4', 'Method "%s()" is deprecated, use "%s::createToken()" instead.', __METHOD__, __CLASS__);
+
+        return $this->createToken($passport, $firewallName);
     }
 
     public function createToken(Passport $passport, string $firewallName): TokenInterface

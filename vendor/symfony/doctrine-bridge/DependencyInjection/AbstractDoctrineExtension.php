@@ -135,11 +135,20 @@ abstract class AbstractDoctrineExtension extends Extension
      *
      * Returns false when autodetection failed, an array of the completed information otherwise.
      *
+     * @param string|null $bundleDir The bundle directory path
+     *
      * @return array|false
      */
-    protected function getMappingDriverBundleConfigDefaults(array $bundleConfig, \ReflectionClass $bundle, ContainerBuilder $container, string $bundleDir = null): array|false
+    protected function getMappingDriverBundleConfigDefaults(array $bundleConfig, \ReflectionClass $bundle, ContainerBuilder $container/*, string $bundleDir = null*/)
     {
-        $bundleDir ??= \dirname($bundle->getFileName());
+        if (\func_num_args() < 4 && __CLASS__ !== static::class && __CLASS__ !== (new \ReflectionMethod($this, __FUNCTION__))->getDeclaringClass()->getName() && !$this instanceof \PHPUnit\Framework\MockObject\MockObject && !$this instanceof \Prophecy\Prophecy\ProphecySubjectInterface && !$this instanceof \Mockery\MockInterface) {
+            trigger_deprecation('symfony/doctrine-bridge', '5.4', 'The "%s()" method will have a new "string $bundleDir = null" argument in version 6.0, not defining it is deprecated.', __METHOD__);
+            $bundleDir = null;
+        } else {
+            $bundleDir = func_get_arg(3);
+        }
+
+        $bundleDir ?? $bundleDir = \dirname($bundle->getFileName());
 
         if (!$bundleConfig['type']) {
             $bundleConfig['type'] = $this->detectMetadataDriver($bundleDir, $container);
@@ -243,8 +252,10 @@ abstract class AbstractDoctrineExtension extends Extension
 
     /**
      * Detects what metadata driver to use for the supplied directory.
+     *
+     * @return string|null A metadata driver short name, if one can be detected
      */
-    protected function detectMetadataDriver(string $dir, ContainerBuilder $container): ?string
+    protected function detectMetadataDriver(string $dir, ContainerBuilder $container)
     {
         $configPath = $this->getMappingResourceConfigDirectory($dir);
         $extension = $this->getMappingResourceExtension();
@@ -281,6 +292,10 @@ abstract class AbstractDoctrineExtension extends Extension
      */
     private function detectMappingType(string $directory, ContainerBuilder $container): string
     {
+        if (\PHP_VERSION_ID < 80000) {
+            return 'annotation';
+        }
+
         $type = 'attribute';
 
         $glob = new GlobResource($directory, '*', true);
@@ -316,9 +331,11 @@ abstract class AbstractDoctrineExtension extends Extension
     /**
      * Loads a cache driver.
      *
+     * @return string
+     *
      * @throws \InvalidArgumentException
      */
-    protected function loadCacheDriver(string $cacheName, string $objectManagerName, array $cacheDriver, ContainerBuilder $container): string
+    protected function loadCacheDriver(string $cacheName, string $objectManagerName, array $cacheDriver, ContainerBuilder $container)
     {
         $cacheDriverServiceId = $this->getObjectManagerElementName($objectManagerName.'_'.$cacheName);
 
@@ -392,8 +409,10 @@ abstract class AbstractDoctrineExtension extends Extension
      * Returns a modified version of $managerConfigs.
      *
      * The manager called $autoMappedManager will map all bundles that are not mapped by other managers.
+     *
+     * @return array
      */
-    protected function fixManagersAutoMappings(array $managerConfigs, array $bundles): array
+    protected function fixManagersAutoMappings(array $managerConfigs, array $bundles)
     {
         if ($autoMappedManager = $this->validateAutoMapping($managerConfigs)) {
             foreach (array_keys($bundles) as $bundle) {
@@ -417,25 +436,35 @@ abstract class AbstractDoctrineExtension extends Extension
      * Prefixes the relative dependency injection container path with the object manager prefix.
      *
      * @example $name is 'entity_manager' then the result would be 'doctrine.orm.entity_manager'
+     *
+     * @return string
      */
-    abstract protected function getObjectManagerElementName(string $name): string;
+    abstract protected function getObjectManagerElementName(string $name);
 
     /**
      * Noun that describes the mapped objects such as Entity or Document.
      *
      * Will be used for autodetection of persistent objects directory.
+     *
+     * @return string
      */
-    abstract protected function getMappingObjectDefaultName(): string;
+    abstract protected function getMappingObjectDefaultName();
 
     /**
      * Relative path from the bundle root to the directory where mapping files reside.
+     *
+     * @param string|null $bundleDir The bundle directory path
+     *
+     * @return string
      */
-    abstract protected function getMappingResourceConfigDirectory(string $bundleDir = null): string;
+    abstract protected function getMappingResourceConfigDirectory(/*string $bundleDir = null*/);
 
     /**
      * Extension used by the mapping files.
+     *
+     * @return string
      */
-    abstract protected function getMappingResourceExtension(): string;
+    abstract protected function getMappingResourceExtension();
 
     /**
      * The class name used by the various mapping drivers.

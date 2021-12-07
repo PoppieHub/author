@@ -59,7 +59,7 @@ interface DataTransformerInterface
      *
      * @throws TransformationFailedException when the transformation fails
      */
-    public function transform(mixed $value);
+    public function transform($value);
 
     /**
      * Transforms a value from the transformed representation to its original
@@ -88,5 +88,5 @@ interface DataTransformerInterface
      *
      * @throws TransformationFailedException when the transformation fails
      */
-    public function reverseTransform(mixed $value);
+    public function reverseTransform($value);
 }

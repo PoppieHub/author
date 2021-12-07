@@ -27,7 +27,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class HelpCommand extends Command
 {
-    private Command $command;
+    private $command;
 
     /**
      * {@inheritdoc}
@@ -67,9 +67,11 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->command ??= $this->getApplication()->find($input->getArgument('command_name'));
+        if (null === $this->command) {
+            $this->command = $this->getApplication()->find($input->getArgument('command_name'));
+        }
 
         $helper = new DescriptorHelper();
         $helper->describe($output, $this->command, [
@@ -77,7 +79,7 @@ EOF
             'raw_text' => $input->getOption('raw'),
         ]);
 
-        unset($this->command);
+        $this->command = null;
 
         return 0;
     }
