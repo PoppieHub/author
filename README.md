@@ -1,16 +1,14 @@
-# "Автор" - проект предназначен для `биржы` студенческих работ 
+Проект - "Автор", реализованный на фреймворке `Symfony`
 
 ---
 
 ### Содержание
-1. [MarkDown](MarkDown.md)
-2. [Git Commands](GitCommands.md)
+1. [Реализация](./readme/realased.md)
+2. [Дамп базы данных](./readme/dump.md)
 
-![GitHubLogo](./assets/GitHub_Logo.png)
+![GitHubLogo](./readme/assets/GitHub_Logo.png)
 
-LICENSE: [MIT](./license.md)
+LICENSE: [MIT](./readme/license.md)
 
 ---
 
-Git logo by 'EnterInIT - SCCM' - https://enterinit.com/ru/github-logo/, 
-license: [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) 
